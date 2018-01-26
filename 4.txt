@@ -1,0 +1,378 @@
+laravel docs: https://cs.laravel-china.org/
+Boostrap: http://getbootstrap.com/
+font awesome: http://fontawesome.io
+Java: http://weiyu-blog.logdown.com/posts/316972-java-ii-basic-operations-loops
+Laravel tips: http://blog.tonycube.com/2015/01/laravel-11-route.html
+
+前?:http://oomusou.io/laravel/laravel-for-newbie/
+http://www.laravel-dojo.com/workshops/201507-ntpc
+
+
+
+Step1: 更改localhost: C:\xampp\apache\conf\extra
+Step2: 更改hosts C:\Windows\System32\drivers\etc
+
+
+
+->  插入式引用運算子
+:: 範圍解析操作符
+=> array 用的
+
+composer create-project laravel/laravel xxxx
+
+
+
+
+View
+
+★Resource--☆view
+
+    ◆layouts-- 網頁框架
+    ◆partials
+    ◆shop--index.blade.php
+    ◆user
+
+======================= View =================================
+
+                ◆layouts---master.blade.php(網頁框架)
+                    
+                    @yield('title')
+                    @yield('styles')
+                    @yield('content')
+                    @yield('scripts')
+                    
+                    <!doctype html>
+                    <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <title>@yield('title')</title>
+                            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+                            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+                            <link rel="stylesheet" href="{{ URL::to('src/css/app.css') }}">
+
+                            @yield('styles')
+                        </head>
+                                <body>
+                                        @include('partials.header')
+                                        
+                                            @yield('content')
+                                       
+
+                                        <script   src="https://code.jquery.com/jquery-1.12.3.min.js"   integrity="sha256-aaODHAgvwQW1bFOGXMeX+pC4PZIPsvn2h1sArYOhgXQ="   crossorigin="anonymous"></script>
+                                        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+                                        @yield('scripts')
+                                </body>
+                     </html>
+
+
+                ◆shop--index.blade.php(網頁顯示畫面)
+                    
+                    @extends('layouts.master')
+
+                    @section('title')
+                            Laravel Ryan's Shop
+                    @endsection
+
+
+
+                    @section('content')
+                            <h1>Ryan!</h1>
+                    @endsection
+
+
+=====================  thumbnail--  imagePath   title  description  price====================================
+
+                ◆shop-- index.blade.php(購物表單  圖.標題.敘述.價格)
+
+                    @extends('layouts.master')
+
+                    @section('title')
+                            Laravel Ryan's Shop
+                    @endsection
+
+
+
+                    @section('content')
+                            
+
+                        <div class="row">
+
+                                <div class="col-sm-6 col-md-4">
+                                        
+                                        <div class="thumbnail">
+                                                    <img src="http://3.bp.blogspot.com/-3REl1dnP4Xs/VJLZohkS0mI/AAAAAAAAEIU/M0Bb4r6XLOs/s1600/laravel-logo.jpg" alt="..."  class="img-responsive">
+
+                                                        <div class="caption">
+                                                    
+                                                            <h3>Product title(Product 1)</h3>
+                                                            <p class="description">(Description1)</p>
+
+                                                                <div class="clearfix">
+                                                                        <div class="pull-left  price">$1000</div>
+                                                                        <a href="#" class="btn btn-success pull-right" role="button">Add to Cart</a>
+                                                                </div>
+
+
+                                                        </div>.caption      {{--表單--}}
+                                             
+                                        </div>.thumbnail
+
+                                 </div>.col-sm-6 col-md-4
+
+                        </div>.row
+
+                    @endsection
+
+===============================================================================================
+
+★public 
+
+☆css---app.css(原本就有)
+
+☆js
+☆src---src---css--app.css(新增)
+
+=======================================================================================
+
+☆src---src---css--app.css(新增)
+
+
+        .thumbnail img{
+                max-height: 150px;
+        }
+
+        .thumbnail .description{
+                color: #2a88bd;
+        }
+
+
+
+        .price{
+                font-weight: bold;
+                font-size: 16px;
+        }
+
+        
+==========================================================================================        
+============================== Model  and  DB =============================================
+==========================================================================================
+
+
+
+
+
+
+============================  Product.php   (1.imagepath  2.title  3.description 4.price)  from  Model  =======================
+
+★app--Product.php(新增)  
+
+    php artisan make:model Product -m  Product.php(新增)    extends Model
+
+
+ 
+★App---Product.php
+
+    class Product extends Model
+    {
+        
+        public function run()
+        {
+           producted $fillable = ['imagepath','title','description','price'];
+        }
+        //  Model    1.imagepath  2.title  3.description 4.price
+
+
+
+    
+=======================    CreateProductsTable.php  (建立書的表單及屬性)  products   ================   
+    
+★database--☆migration
+
+    2017_11_16_083419_create_products_table.php
+    
+            
+    
+         class CreateProductsTable extends Migration
+            {
+               
+                public function up()
+                {
+                    Schema::create('products', function (Blueprint $table) {
+                        $table->increments('id');
+                        $table->timestamps();
+                        $table->string('imagePath');
+                        $table->string('title');
+                        $table->text('description');
+                        $table->integer('price');
+                    });
+                }////////////////up
+
+                
+                public function down()
+                {
+                
+                    Schema::dropIfExists('products');
+                    
+                }////////////////down
+            }
+    
+    
+=============================(假資料)   ProductTableSeeder.php  seed  to  Product.php ==================3:57=====
+
+
+
+★database--☆seeds--ProductTableSeeder.php
+
+    php artisan make:seed ProductTableSeeder(新增)
+    
+    
+        class ProductTableSeeder extends Seeder
+        {
+            
+            public function run()
+            {
+                $product = new App\Product();
+                
+            }
+        }//init()
+        
+
+ 
+ 
+ 
+★database--☆seeds--ProductTableSeeder.php
+
+    class ProductTableSeeder extends Seeder
+    {
+        
+        public function run()
+        {
+            $product = new App\Product([
+                'imagepath'=>'http://3.bp.blogspot.com/-3REl1dnP4Xs/VJLZohkS0mI/AAAAAAAAEIU/M0Bb4r6XLOs/s1600/laravel-logo.jpg',
+                'title'=>'Laravel',
+                'description'=>'Superhero!',
+                'price'=>1000
+            ]);
+
+            $product->save();
+        }//create fake file
+ 
+ 
+ 
+ 
+ 
+ ============================  DatabaseSeeder.php  =======================
+ 
+★database--☆seeds--DatabaseSeeder.php
+
+
+            class DatabaseSeeder extends Seeder
+            {
+                
+                public function run()
+                {
+                        $this->call(ProductTableSeeder::class);
+                }
+            }
+
+ 
+ ===============================  連接資料庫   =======================================
+ 
+ 
+    create table表單: php artisan migrate
+ 
+    DB concect: php artisan db:seed
+ 
+ =============================================================================================
+ 
+ 
+ 
+                                        Controller
+                            
+ 
+                        View                                        Model----Migration
+                
+ 
+ ==============================  Controller(抓取Product.php)  ==============================================================
+ 
+ ★http--- ☆Auth(del)
+ 
+        php artisan make:controller ProductController(xxxx)新增  Control.index([ 
+        
+                                                        $products=()  
+                                                        ])
+        
+        
+        
+      class ProductController extends Controller
+      {
+            public function getIndex()
+            {
+                   $products = Product::all();
+                return view('shop.index',['products' => $products]);
+            }
+      }
+        
+        
+ 
+ =========================  Route    ========================================================================
+ 
+ 
+     Route::get('/', [
+        'uses' => 'ProductController@getIndex',
+        'as' => 'product.index'
+     ]);
+ 
+ 
+ 
+ 
+ =========================  index.blade.php     @foreach($products->chunk(3) as $productChunk)========================================
+ 
+ 
+ 
+ @extends('layouts.master')
+
+@section('title')
+    Laravel Ryan's Shop
+@endsection
+
+
+
+@section('content')
+
+    @foreach($products->chunk(3)  as $productChunk)
+        <div class="row">
+
+            @foreach($productChunk as $product)
+                <div class="col-sm-6 col-md-4">
+
+                    <div class="thumbnail">
+                        <img src="{{ $product->imagePath }}" alt="..."  class="img-responsive">
+
+                        <div class="caption">
+
+                            <h3>{{ $product->title }}</h3>
+                            <p class="description">{{ $product->description }}</p>
+
+                            <div class="clearfix">
+                                <div class="pull-left  price">${{ $product->price }}</div>
+                                <a href="#" class="btn btn-success pull-right" role="button">Add to Cart</a>
+                            </div>
+
+                        </div>      {{--表單--}}
+
+                    </div>
+
+                </div>
+            @endforeach
+
+        </div>
+    @endforeach
+
+
+
+@endsection
+ 
+============================================
+ 
+ 
